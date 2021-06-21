@@ -8,6 +8,7 @@ export default {
         <!-- <pre>{{books}}</pre> -->
         <li v-for= "book in books" :key="book.id" class="book-preview-container">
             <book-preview :book="book" @click.native="select(book)"/>
+            <router-link :to="'/books/'+book.id">Details</router-link>
         </li>
     </ul>
   `,

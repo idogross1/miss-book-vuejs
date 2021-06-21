@@ -1,13 +1,16 @@
-import { booksService } from '../services/books-service.js';
 import bookList from '../cmps/book-list.js';
 import bookFilter from '../cmps/book-filter.js';
 import bookDetails from './book-details.js';
+
+import { booksService } from '../services/books-service.js';
+import { eventBus } from '../services/event-bus-service.js';
 
 export default {
   template: `
     <section class="book-app">
         <book-filter @filtered="setFilter"/>
-        <book-list :books="booksToShow" @selected="selectBook"/>
+        <!-- <book-list :books="booksToShow" @selected="selectBook"/> -->
+        <book-list :books="booksToShow"/>
         <book-details v-if="selectedBook" :book="selectedBook" @close ="closeDetails"/>
         <div :class="{overlay: selectedBook}" @click="closeDetails"></div>
     </section>
@@ -15,17 +18,20 @@ export default {
 
   data() {
     return {
-      books: booksService.query(),
+      books: [],
       selectedBook: null,
       filterBy: null,
     };
   },
 
+  created() {
+    this.loadBooks();
+    eventBus.$on('removeReview', this.removeReview);
+  },
+
   methods: {
-    selectBook(book) {
-      console.log('selected book in book-app: ', book.title);
-      this.selectedBook = book;
-      console.log(this.selectedBook.title);
+    loadBooks() {
+      booksService.query().then((books) => (this.books = books));
     },
 
     closeDetails() {

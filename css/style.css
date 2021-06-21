@@ -46,6 +46,10 @@ img {
   object-fit: contain;
 }
 
+a {
+  text-decoration: none;
+}
+
 /* HEADER */
 
 .header {
@@ -55,6 +59,14 @@ img {
   font-family: 'Lobster';
   letter-spacing: 3px;
   font-size: 1.875rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.header nav > * {
+  font-family: 'Titillium';
+  color: #f8f8f8;
 }
 
 /* APP */
@@ -67,8 +79,19 @@ img {
 
 .book-filter {
   padding: 20px;
+  background-color: #b4b4b4;
+  display: flex;
 }
 
+.book-filter > * {
+  padding: 10px;
+}
+
+.book-filter input {
+  width: 150px;
+  border-radius: 7px;
+  border-color: black;
+}
 /* LIST */
 
 .book-list {
@@ -96,11 +119,27 @@ img {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: lightpink;
+  align-items: center;
+  background-color: white;
+}
+
+.book-preview-container a {
+  color: black;
+  transition: color 0.8s ease-in;
+}
+
+.book-preview-container a:hover {
+  color: white;
 }
 
 .book-preview-container img {
   max-height: 250px;
+  transition: transform 0.8s;
+}
+
+.book-preview-container img:hover {
+  transform: scale(1.1);
+  box-shadow: #616161;
 }
 
 /* DETAILS */
@@ -110,14 +149,6 @@ img {
   flex-direction: column;
   background-color: white;
   padding: 2rem;
-  position: absolute;
-  top: 18%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 70%;
-  border-radius: 5px;
-  border: 1px solid #616161;
-  z-index: 10;
 }
 
 .book-title-box {
@@ -185,6 +216,94 @@ img {
   color: red;
 }
 
+.user-msg {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 10px;
+}
+
+.success {
+  background-color: rgb(37, 206, 37);
+}
+
+.error {
+  background-color: red;
+}
+
+.reviews {
+  display: flex;
+  margin: 20px 0;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.reviews-container {
+  padding: 10px;
+  box-shadow: 0 0 0 2px #616161;
+  border-radius: 8px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.long-text p {
+  overflow-wrap: break-word;
+}
+
+.long-text button {
+  margin-bottom: 5px;
+}
+
+.delete-review-btn {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.review-add {
+  background-color: #b4b4b4;
+  padding: 20px;
+}
+
+.review-add h4 {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+  font-size: 25px;
+}
+
+.review-add form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-page {
+  height: 90vh;
+  background-image: url('../img/home-bcg.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  position: relative;
+}
+
+.quote {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+}
+
+.quote h1 {
+  font-size: 2rem;
+}
+
+.about {
+  display: flex;
+}
+
+.about img {
+  max-height: 350px;
+}
 /* FONTS */
 
 @font-face {

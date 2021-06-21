@@ -1,38 +1,62 @@
 import longText from '../cmps/long-text.js';
+import reviewAdd from '../cmps/review-add.js';
+import review from '../cmps/review.js';
+import { booksService } from '../services/books-service.js';
+import { eventBus } from '../services/event-bus-service.js';
 
 export default {
-  props: ['book'],
-
   template: `
-        <section class="book-details">
-          <div class="book-title-box">
-              <h3>{{book.title}}</h3>
-              <h4>{{book.subtitle}}</h4>
-          </div>
-          <div class="details-main-box">
-            <div class="image-container">
-                <img :src="book.thumbnail" alt="">
-            </div>
-            <div class="details-text">
-              <p>By: {{authors}}</p>
-              <p>Year: {{book.publishedDate}}, {{age}}</p>
-              <p>Page Count: {{book.pageCount}}{{level}}
-              </p>
-              <p class="categories">Categories: {{categories}}</p>
-              <long-text :text="book.description"></long-text>
-              <p>Language: {{book.language}}</p>
-              <p>Price: <span :class="{green: isCheap, red: isExpensive}">{{book.listPrice.amount}}{{currency}}</span></p>
-              <!-- <img v-if="book.listPrice.isOnSale" src="../../img/sale.svg"></img> -->
-            </div>
+    <section v-if="book" class="book-details">
+      <div class="book-title-box">
+        <h3>{{book.title}}</h3>
+        <h4>{{book.subtitle}}</h4>
+      </div>
+
+      <div class="details-main-box">
+
+        <div class="image-container">
+          <img :src="book.thumbnail" alt="">
         </div>
-            <div class="close-details-container">
-                <button class = "close-details"@click="$emit('close')">X</button>
-            </div>
-        </section>
+
+        <div class="details-text">
+          <p>By: {{authors}}</p>
+          <p>Year: {{book.publishedDate}}, {{age}}</p>
+          <p>Page Count: {{book.pageCount}}{{level}}
+          </p>
+          <p class="categories">Categories: {{categories}}</p>
+          <long-text :text="book.description"></long-text>
+          <p>Language: {{book.language}}</p>
+          <p>Price: <span :class="{green: isCheap, red: isExpensive}">{{book.listPrice.amount}}{{currency}}</span></p>
+          <!-- <img v-if="book.listPrice.isOnSale" src="../../img/sale.svg"></img> -->
+          </div>
+        </div>
+
+        <div class="reviews">
+          <div class="reviews-container" v-for="review in book.reviews">
+            <review :review="review"></review>
+            <button class="delete-review-btn" @click="remove(book.id, review.id)">x</button>
+          </div>
+        </div>
+        
+        <review-add :book="book"></review-add>
+        
+        <div class="close-details-container">
+          <!-- <button class = "close-details"@click="$emit('close')">X</button> -->
+          <router-link to="/books">Back</router-link>
+        </div>
+        
+      </section>
     `,
 
   data() {
-    return {};
+    return {
+      book: null,
+    };
+  },
+
+  created() {
+    const { bookId } = this.$route.params;
+    this.loadBook(bookId);
   },
 
   computed: {
@@ -73,7 +97,35 @@ export default {
     },
   },
 
+  methods: {
+    loadBook(bookId) {
+      booksService.getById(bookId).then((book) => (this.book = book));
+    },
+
+    remove(bookId, reviewId) {
+      booksService
+        .removeReview(bookId, reviewId)
+        .then(() => {
+          const msg = {
+            txt: 'Deleted review successfuly',
+            type: 'success',
+          };
+          eventBus.$emit('show-msg', msg);
+          this.loadBook(bookId);
+        })
+        .catch((err) => {
+          const msg = {
+            txt: 'Error, please try again',
+            type: 'error',
+          };
+          eventBus.$emit('show-msg', msg);
+        });
+    },
+  },
+
   components: {
     longText,
+    reviewAdd,
+    review,
   },
 };

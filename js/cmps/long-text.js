@@ -4,23 +4,30 @@ export default {
   template: `
         <div class="long-text">
             <p>{{textToShow}}</p>
-            <button class="read-more-less" @click="readMore =! readMore">
-                <span v-if="readMore">Read More</span>
-                <span v-if="!readMore">Read Less</span>
-            </button>
+
+            <div class="long-text" v-if="longText">
+              <button class="read-more-less" @click="readMore =! readMore">
+                <span v-if="readMore">Read Less</span>
+                <span v-if="!readMore">Read More</span>
+              </button>
+            </div>
         </div>
     `,
 
   data() {
     return {
-      readMore: true,
+      readMore: false,
+      longText: false,
     };
   },
 
   computed: {
     textToShow() {
-      if (!this.readMore) return this.text;
-      return this.text.substring(0, 99) + '...';
+      if (this.text.length < 100) return this.text;
+
+      this.longText = true;
+      if (this.readMore) return this.text;
+      if (!this.readMore) return this.text.substring(0, 99) + '...';
     },
   },
 };

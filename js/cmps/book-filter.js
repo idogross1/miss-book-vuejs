@@ -23,7 +23,7 @@ export default {
 
   methods: {
     filter() {
-      this.$emit('filtered', this.filterBy);
+      this.$emit('filtered', { ...this.filterBy });
     },
   },
 };
