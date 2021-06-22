@@ -4,6 +4,7 @@ export default {
   template: `
   <!-- <pre>{{book}}</pre> -->
     <div class="book-preview">
+    {{this.book}}
     {{book}}
         <h3>{{book.title}}</h3>
         <div class="thumbnail-container">
