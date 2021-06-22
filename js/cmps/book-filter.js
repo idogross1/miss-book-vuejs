@@ -7,7 +7,6 @@ export default {
         <input v-model=filterBy.fromPrice type="number" @input="filter">
         <label>To:</label>
         <input v-model=filterBy.toPrice type="number" @input="filter">
-
     </section>
     `,
 

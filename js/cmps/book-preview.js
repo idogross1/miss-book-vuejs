@@ -2,6 +2,7 @@ export default {
   props: ['book'],
 
   template: `
+  <!-- <pre>{{book}}</pre> -->
     <div class="book-preview">
         <h3>{{book.title}}</h3>
         <div class="thumbnail-container">

@@ -81,6 +81,7 @@ a {
   padding: 20px;
   background-color: #b4b4b4;
   display: flex;
+  align-items: center;
 }
 
 .book-filter > * {
@@ -304,6 +305,34 @@ a {
 .about img {
   max-height: 350px;
 }
+
+/* Add Book */
+
+.book-add {
+  padding: 20px 10px;
+}
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+}
+
+input[type='text'] {
+  height: 30px;
+  width: 130px;
+  border-radius: 8px;
+  border: 1px solid black;
+  transition: width 0.4s ease-in-out;
+}
+
+input[type='text']:focus {
+  width: 80%;
+}
+
+.result-container p {
+  display: inline-block;
+}
+
 /* FONTS */
 
 @font-face {

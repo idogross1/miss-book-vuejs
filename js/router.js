@@ -2,6 +2,7 @@ import homePage from './pages/home-page.js';
 import aboutPage from './pages/about-page.js';
 import bookApp from './pages/book-app.js';
 import bookDetails from './pages/book-details.js';
+import bookAdd from './pages/book-add.js';
 
 const routes = [
   {
@@ -22,6 +23,11 @@ const routes = [
   {
     path: '/books/:bookId',
     component: bookDetails,
+  },
+
+  {
+    path: '/bookAdd',
+    component: bookAdd,
   },
 ];
 

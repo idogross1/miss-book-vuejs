@@ -18,13 +18,14 @@ export default {
           <img :src="book.thumbnail" alt="">
         </div>
 
+
         <div class="details-text">
           <p>By: {{authors}}</p>
           <p>Year: {{book.publishedDate}}, {{age}}</p>
           <p>Page Count: {{book.pageCount}}{{level}}
           </p>
           <p class="categories">Categories: {{categories}}</p>
-          <long-text :text="book.description"></long-text>
+          <long-text v-if="book.description" :text="book.description"></long-text>
           <p>Language: {{book.language}}</p>
           <p>Price: <span :class="{green: isCheap, red: isExpensive}">{{book.listPrice.amount}}{{currency}}</span></p>
           <!-- <img v-if="book.listPrice.isOnSale" src="../../img/sale.svg"></img> -->
@@ -37,6 +38,9 @@ export default {
             <button class="delete-review-btn" @click="remove(book.id, review.id)">x</button>
           </div>
         </div>
+
+        <router-link :to="'/books/'+prevBookId">Prev Book</router-link>
+        <router-link :to="'/books/'+nextBookId">Next Book</router-link>
         
         <review-add :book="book"></review-add>
         
@@ -51,12 +55,30 @@ export default {
   data() {
     return {
       book: null,
+      nextBookId: null,
+      prevBookId: null,
     };
   },
 
-  created() {
-    const { bookId } = this.$route.params;
-    this.loadBook(bookId);
+  watch: {
+    '$route.params.bookId': {
+      immediate: true,
+      handler() {
+        const { bookId } = this.$route.params;
+
+        booksService.getById(bookId).then((book) => {
+          this.book = book;
+        });
+
+        booksService
+          .getNextBookId(bookId)
+          .then((bookId) => (this.nextBookId = bookId));
+
+        booksService
+          .getPrevBookId(bookId)
+          .then((bookId) => (this.prevBookId = bookId));
+      },
+    },
   },
 
   computed: {
@@ -89,7 +111,7 @@ export default {
     },
 
     categories() {
-      return this.book.categories.join(', ');
+      return this.book.categories?.join(', ');
     },
 
     authors() {

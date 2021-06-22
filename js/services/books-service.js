@@ -9,10 +9,34 @@ export const booksService = {
   getById,
   save,
   removeReview,
+  googleBooks,
+  addGoogleBook,
+  getNextBookId,
+  getPrevBookId,
 };
 
 function query() {
   return storageService.query(BOOKS_KEY);
+}
+
+function getNextBookId(bookId) {
+  return query().then((books) => {
+    const idx = books.findIndex((book) => book.id === bookId);
+    return idx === books.length - 1 ? books[0].id : books[idx + 1].id;
+  });
+}
+
+function getPrevBookId(bookId) {
+  return query().then((books) => {
+    const idx = books.findIndex((book) => book.id === bookId);
+    return idx === 0 ? books[books.length - 1].id : books[idx - 1].id;
+  });
+}
+
+function googleBooks(searchStr) {
+  return fetch(
+    `https://www.googleapis.com/books/v1/volumes?printType=books&q=${searchStr}&langRestrict=en&key=AIzaSyDMuVt3UbEIcGaD9mERdWDBQwkxvFGcASA`
+  ).then((response) => response.json());
 }
 
 function getById(bookId) {
@@ -30,6 +54,26 @@ function removeReview(bookId, reviewId) {
     reviews.splice(revId, 1);
     save(book);
   });
+}
+function addGoogleBook(googleBook) {
+  console.log(googleBook);
+  const book = {};
+  book.id = utilService.makeId();
+  book.title = googleBook.volumeInfo.title;
+  book.subtitle = googleBook.volumeInfo.subtitle || '';
+  book.authors = googleBook.volumeInfo.authors;
+  book.publishedDate = googleBook.volumeInfo.publishedDate;
+  book.description = googleBook.volumeInfo.description || 'great';
+  book.categories = googleBook.volumeInfo.categories;
+  book.thumbnail = googleBook.volumeInfo.imageLinks.thumbnail;
+  book.language = googleBook.volumeInfo.language;
+  book.pageCount = googleBook.volumeInfo.pageCount;
+  book.listPrice = {};
+  book.listPrice.amount = googleBook.amount || 100;
+  book.listPrice.currencyCode = googleBook.currencyCode || 'EUR';
+  book.listPrice.isOnSale = false;
+
+  storageService.post(BOOKS_KEY, book);
 }
 
 function _createBooks() {
