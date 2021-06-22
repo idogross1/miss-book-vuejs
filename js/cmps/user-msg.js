@@ -4,7 +4,7 @@ export default {
   template: `
     <div v-if="msg" class="user-msg" :class="msg.type">
         <p>{{msg.txt}}</p>
-        <router-link :to="msg.link">Check it out</router-link>
+        <router-link v-if="msg.link" :to="msg.link">Check it out</router-link>
         <button @click="close">x</button>
     </div>
     `,

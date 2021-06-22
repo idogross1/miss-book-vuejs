@@ -13,6 +13,7 @@ export const booksService = {
   addGoogleBook,
   getNextBookId,
   getPrevBookId,
+  addReview,
 };
 
 function query() {
@@ -45,6 +46,23 @@ function getById(bookId) {
 
 function save(book) {
   return storageService.put(BOOKS_KEY, book);
+}
+
+function addReview(bookId, review) {
+  // var txt = '';
+  // var possible =
+  //   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  // for (var i = 0; i < 3; i++) {
+  //   txt += possible.charAt(Math.floor(Math.random() * possible.length));
+  // }
+
+  return getById(bookId).then((book) => {
+    const id = utilService.makeId(3);
+    review.id = id;
+    if (!book.reviews) book.reviews = [review];
+    else book.reviews.push(review);
+    save(book);
+  });
 }
 
 function removeReview(bookId, reviewId) {

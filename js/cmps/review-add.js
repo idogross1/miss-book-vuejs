@@ -36,26 +36,25 @@ export default {
   },
   methods: {
     save() {
-      var txt = '';
-      var possible =
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      for (var i = 0; i < 3; i++) {
-        txt += possible.charAt(Math.floor(Math.random() * possible.length));
-      }
-
-      this.review.id = txt;
-      if (!this.book.reviews) this.book.reviews = [this.review];
-      else this.book.reviews.push(this.review);
-
-      const msg = {
-        txt: `Review to ${this.book.title} added successfuly`,
-        type: 'success',
-        link: `/books/${this.book.id}`,
-      };
-
-      eventBus.$emit('show-msg', msg);
-
-      booksService.save(this.book).then(this.$router.push('/books'));
+      booksService
+        .addReview(this.book.id, this.review)
+        .then(() => {
+          const msg = {
+            txt: `Review to ${this.book.title} added successfuly`,
+            type: 'success',
+            link: `/books/${this.book.id}`,
+          };
+          eventBus.$emit('show-msg', msg);
+          this.loadBook(bookId);
+        })
+        // .catch((err) => {
+        //   const msg = {
+        //     txt: 'Error, please try again',
+        //     type: 'error',
+        //   };
+        //   eventBus.$emit('show-msg', msg);
+        // })
+        .finally(this.$router.push('/books'));
     },
   },
 };
